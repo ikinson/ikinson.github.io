@@ -1,0 +1,10 @@
+# Site settings
+title: Kinson的博客
+email: ikinson@outlook.com
+description: Kinson's Blog  Data Analyst
+github_username:  ikinson
+permalink: /:year/:month/:day/:title/
+# Build settings
+markdown: kramdown
+paginate: 10
+paginate_path: "page:num"

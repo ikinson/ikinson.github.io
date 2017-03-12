@@ -1,0 +1,114 @@
+---
+layout: default
+---
+<div id="index" class="row">
+  <div class="col-sm-9">
+    <div class="post-area">
+      <div class="post-list-header">
+        Welcom !!!
+      </div>
+      <div class="post-list-body">        
+        <div class="all-posts" post-cate="All" post-tag="All">
+          {% for post in paginator.posts %}
+            <a class="post-list-item" href="{{ post.url | prepend: site.baseurl }}">
+              <h2>
+              {{ post.title }}
+              </h2>
+              <span class="">{{ post.date | date: "%b %-d, %Y" }}{% if post.categories %} • {{ post.categories }}{% endif %}</span>
+            </a>
+          {% endfor %}
+          <!-- 分页 -->
+          <div class="paginator">
+            {% if paginator.total_pages > 1 %}
+              <!-- 分页代码 -->
+              {% if paginator.previous_page %}
+                <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">上一页</a>
+              {% endif %}
+              {% for page in (1..paginator.total_pages) %}
+                {% if page == paginator.page %}
+                  <span class="active">{{ page }}</span>
+                {% elsif page == 1 %}
+                  <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
+                {% else %}
+                  <a href="{{ /site.paginate_path | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
+                {% endif %}
+              {% endfor %}
+              {% if paginator.next_page %}
+                <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">下一页</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% for category in site.categories %}
+          <div post-cate="{{category | first}}">
+            {% for posts in category  %}
+              {% for post in posts %}
+                {% if post.url %}
+                  <a href="{{ post.url }}" class="post-list-item">
+                    <h2>
+                    {{ post.title }}
+                    </h2>
+                    <span class="">{{ post.date | date: "%b %-d, %Y" }}</span>
+                  </a>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+        
+        {% for tag in site.tags %}
+          <div post-tag="{{tag | first}}">
+            {% for posts in tag  %}
+              {% for post in posts %}
+                {% if post.url %}
+                  <a href="{{ post.url }}" class="post-list-item">
+                    <h2>
+                    {{ post.title }}
+                    </h2>
+                    <span class="">{{ post.date | date: "%b %-d, %Y" }}</span>
+                  </a>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <!-- </div> -->
+
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-sm-3">
+    <div class="shadow-corner-curl hidden-xs">
+      <!--Categories-->
+      <div class="categories-list-header"><span class="fa fa-folder-open fa-fw"></span>
+        Categories
+      </div>
+      <a href="javascript:;" class="categories-list-item" cate="All">
+        All<span class="my-badge"> {{site.posts  | size}}</span>
+      </a>
+      {% for category in site.categories %}
+        <a href="javascript:;" class="categories-list-item" cate="{{ category | first }}">
+          {{ category | first }} <span class="my-badge">{{ category | last | size }}</span>
+        </a>
+      {% endfor %}
+      <br>
+
+      <!--Tags-->
+      <div class="tags-list-header"><span class="fa fa-tags fa-fw"></span>
+        Tags Cloud
+      </div>
+      <br>
+      <div id="tag-cloud">
+        {% assign first = site.tags.first %}{% assign max = first[1].size %}{% assign min = max %}{% for tag in site.tags offset:1 %}{% if tag[1].size > max %}{% assign max = tag[1].size %}{% elsif tag[1].size < min %}{% assign min = tag[1].size %}{% endif %}{% endfor %}{% assign diff = max | minus: min %}
+        {% if diff != 0 %}
+          {% for tag in site.tags %}
+            {% assign temp = tag[1].size | minus: min | times: 36 | divided_by: diff %}{% assign base = temp | divided_by: 4 %}{% assign remain = temp | modulo: 4 %}{% if remain == 0 %}{% assign size = base | plus: 9 %}{% elsif remain == 1 or remain == 2 %}{% assign size = base | plus: 9 | append: '.5' %}{% else %}{% assign size = base | plus: 10 %}{% endif %}{% if remain == 0 or remain == 1 %}{% assign color = 9 | minus: base %}{% else %}{% assign color = 8 | minus: base %}{% endif %}
+            <a href="javascript:;" tag="{{ tag[0] }}" class="tags-cloud-item" style="font-size: {{ size }}pt; color: #{{ color }}{{ color }}{{ color }};"> {{ tag[0] }}</a>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
